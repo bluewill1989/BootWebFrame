@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--&lt;!&ndash; 公共信息，也可以用dubbo.properties配置 &ndash;&gt;-->
+    <!--<dubbo:application name="BootOne" />-->
+    <!--<dubbo:registry address="${zookeeper_url}" file="dubbo/dubbo.cache.${SERVER_NAME}" />-->
+    <!--<dubbo:protocol name="dubbo" port="-1" threads="500" />-->
+    <!--<dubbo:provider filter="traceid" />-->
+    <!--<dubbo:consumer filter="traceid" />-->
+    <!--<dubbo:monitor protocol="registry" />-->
+
+    <!--<dubbo:reference id="iOnlineOrderService" check="false" timeout="10000"-->
+                     <!--interface="com.chinaums.qmf.db.api.IOnlineOrderService" version="1.0" />-->
+
+    <!--<dubbo:reference id="iOrderService" check="false" timeout="10000"-->
+                     <!--interface="com.chinaums.qmf.db.api.IOrderService" version="1.0" />-->
+
+    <!-- 用rest协议在8080端口暴露服务 -->
+    <dubbo:application name="dubboxprovider" />
+    <dubbo:registry address="${zookeeper_url}"/>
+
+
+    <dubbo:protocol name="rest" port="8091" server="tomcat"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.wzn.api.service.dubbo.UserService" ref="userService" protocol="rest"/>
+
+    <!-- 和本地bean一样实现服务 -->
+    <bean id="userService" class="com.wzn.bootwebframe.service.dubbo.UserServiceImpl" />
+
+</beans>
